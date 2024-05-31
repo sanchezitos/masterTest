@@ -1,0 +1,28 @@
+org: mastertest
+app: backend-test
+service: backend-test
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  versionFunctions: false
+  runtime: nodejs14.x
+  environment:
+    GITHUB_API_BASE_URL: ${param:GITHUB_API_BASE_URL}
+    DEFAULT_GITHUB_USER: ${param:DEFAULT_GITHUB_USER}
+
+functions:
+
+  GetRepositories:
+    handler: src/handlers/github.get
+    events:
+      - httpApi:
+          path: /github/repositories/get
+          method: GET
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-prune-plugin
+custom:
+  serverless-offline:
+    httpPort: 3000
